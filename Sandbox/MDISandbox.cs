@@ -12,21 +12,42 @@ using static Sandbox.frmCanvas;
 
 namespace Sandbox
 {
+
     public partial class MDISandbox : Form
     {
         //List<Button> buttons = new List<Button>();
         private int childFormNumber = 1;
         private SelectCanvas selectionScreen;
         bool CLEARINGALL = false; //decide whether to clear all application memory or not
+        //public List<CanvasData> allCanvas;
+
         public MDISandbox()
         {
             InitializeComponent();
+            HomePage home = new HomePage();
+            home.MdiParent = this;
+            home.WindowState = FormWindowState.Maximized;
+            home.Show();
+            MdiClient mdiClient = null;
+            foreach (Control ctl in this.Controls)
+            {
+                if (ctl is MdiClient mc)
+                {
+                    mdiClient = mc;
+                    mdiClient.BackColor = Color.White;
+
+                    break;
+                }
+            }
+
+            this.BackColor = Color.White;
+
             if (CLEARINGALL)
             {
                 ClearAllCanvasData(); //clears all data
             }
             selectionScreen = new SelectCanvas(); //creates select canvas upon load, since user may save a form before opening the select canvas window
-            List<CanvasData> allCanvas;
+            
             string path = Path.Combine( //dynamically get path to file
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json"
@@ -35,21 +56,21 @@ namespace Sandbox
             if (File.Exists(path))
             {
                 string json = File.ReadAllText(path);
-                allCanvas = JsonSerializer.Deserialize<List<CanvasData>>(json) ?? new List<CanvasData>();
+                CanvasManager.AllCanvas = JsonSerializer.Deserialize<List<CanvasData>>(json) ?? new List<CanvasData>();
             }
             else
             {
-                allCanvas = new List<CanvasData>();
+                CanvasManager.AllCanvas = new List<CanvasData>();
             }
-            if (allCanvas.Count > 0)
+            if (CanvasManager.AllCanvas.Count > 0)
             {
-                childFormNumber = (int)allCanvas.Count + 1;
+                childFormNumber = (int)CanvasManager.AllCanvas.Count;
             }
             else
             {
-                childFormNumber = 1;
+                childFormNumber = 0;
             }
-            foreach (var canvas in allCanvas) //makes buttons for selecting forms
+            foreach (var canvas in CanvasManager.AllCanvas) //makes buttons for selecting forms
                 {
                     selectionScreen.createCanvasSelections(canvas.CanvasNum);
                 }
@@ -60,26 +81,35 @@ namespace Sandbox
             int current = childFormNumber;
             return current;
         }
-        private void ShowNewForm(object sender, EventArgs e) //displays new form upon opening
+        public void ShowNewForm(object sender, EventArgs e) //displays new form upon opening
         {
-            frmCanvas childForm = new frmCanvas(selectionScreen, childFormNumber);
+            CanvasData newCanvas = new CanvasData()
+            {
+                CanvasNum = childFormNumber,
+                CanvasName = "Canvas " + (childFormNumber+1), //+1 necessary because this is before childFormNumber is updated, so it's 1 less than required
+                Notes = new List<NoteData>()
+            };
+            CanvasManager.AllCanvas.Add(newCanvas);
+            frmCanvas childForm = new frmCanvas(selectionScreen, childFormNumber, newCanvas);
             childForm.MdiParent = this;
-            childForm.Text = "Window " + childFormNumber;
+            childForm.Text = "Window " + (childFormNumber+1);
             childForm.Show();
             childForm.BringToFront();
+            childForm.TopMost = true;
             childForm.WindowState = FormWindowState.Maximized;
         }
 
-        private void OpenFile(object sender, EventArgs e)
+        public void OpenFile(object sender, EventArgs e)
         {
             if (this.ActiveMdiChild != null)
             {
                 this.ActiveMdiChild.Close();
             }
             selectionScreen.MdiParent = this;
-            selectionScreen.Text = "Window ";
+            selectionScreen.Text = "Select Canvas";
             selectionScreen.WindowState = FormWindowState.Maximized;
             selectionScreen.AutoScroll = true;
+            selectionScreen.TopMost = true;
             selectionScreen.Show();
         }
 
@@ -98,28 +128,6 @@ namespace Sandbox
         {
             this.Close();
         }
-
-        //private void CutToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //}
-
-        //private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //}
-
-        //private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //}
-
-        //private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    toolStrip.Visible = toolBarToolStripMenuItem.Checked;
-        //}
-
-        //private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    statusStrip.Visible = statusBarToolStripMenuItem.Checked;
-        //}
 
         private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
         {

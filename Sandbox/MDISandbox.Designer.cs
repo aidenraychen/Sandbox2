@@ -38,6 +38,12 @@
             menuStrip.SuspendLayout();
             statusStrip.SuspendLayout();
             SuspendLayout();
+
+
+
+
+            
+
             // 
             // menuStrip
             // 
@@ -103,8 +109,6 @@
 
         }
         #endregion
-
-
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripMenuItem fileMenu;

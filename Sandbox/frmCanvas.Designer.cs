@@ -98,7 +98,7 @@
             renameCanvasButton.Name = "SaveCanvas";
             renameCanvasButton.Size = new Size(134, 134);
             renameCanvasButton.TabIndex = 1;
-            renameCanvasButton.Text = "Save";
+            renameCanvasButton.Text = "Rename";
             renameCanvasButton.UseVisualStyleBackColor = true;
             renameCanvasButton.MouseClick += onRenameButtonClick;
 
@@ -119,6 +119,7 @@
             Controls.Add(createNoteButton);
             Controls.Add(changeColorBtn);
             Controls.Add(testButton);
+            Controls.Add(renameCanvasButton);
             //Controls.Add(createDocButton);
             Margin = new Padding(4, 4, 4, 4);
             MdiChildrenMinimizedAnchorBottom = false;
@@ -143,5 +144,6 @@
         private Button saveCanvasButton;
         private ContextMenuStrip colorMenu;
         private Button renameCanvasButton;
+        private Panel canvasPanel;
     }
 }

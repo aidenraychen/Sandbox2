@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.DirectoryServices.ActiveDirectory;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Windows.Forms;
@@ -13,6 +14,15 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 namespace Sandbox
 {
     //private readonly SelectCanvas _selectCanvas;
+
+    public class CanvasData //defines data for each canvas (canvas num and list of notes)
+    {
+        public int CanvasNum { get; set; }
+        public String CanvasName { get; set; }
+        public List<NoteData> Notes { get; set; }
+    }
+
+    
     public partial class frmCanvas : Form
     {
         List<Button> buttons = new List<Button>();
@@ -29,12 +39,15 @@ namespace Sandbox
         private Button renameCanvasSaveButton;
         private Button renameCanvasCancelButton;
         private CanvasData currentCanvas;
-
-        public frmCanvas(SelectCanvas sCanvas, int childFormNumber)
+        bool isPanning = false;
+        Point panStartPoint;
+        Point panOffset = new Point(0, 0);
+        public frmCanvas(SelectCanvas sCanvas, int childFormNumber, CanvasData canvas)
         {
             InitializeComponent();
             InitializeColorMenu();
             InitializeRenamePanel();
+            currentCanvas = canvas;
             _selectCanvas = sCanvas; //import this so that we can make changes on Select Canvas from actions done here (make new select canvas button upon new canvas save)
             string path = Path.Combine( //dynamically get path to file
                 AppDomain.CurrentDomain.BaseDirectory,
@@ -43,6 +56,44 @@ namespace Sandbox
             if (!File.Exists(path))
             {
                 File.WriteAllText(path, "[]"); // create empty JSON file //it doesnt create the file for some reason
+            }
+            this.MouseDown += CanvasMouseDown;
+            this.MouseMove += CanvasMouseMove;
+            this.MouseUp += CanvasMouseUp;
+        }
+
+        private void CanvasMouseDown(object sender, MouseEventArgs e)
+        {
+
+            if (e.Button == MouseButtons.Left)
+            {
+                isPanning = true;
+                panStartPoint = e.Location;
+                this.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void CanvasMouseMove(object sender, MouseEventArgs e)
+        {
+            if (isPanning)
+            {
+                int dx = e.X - panStartPoint.X;
+                int dy = e.Y - panStartPoint.Y;
+                foreach (Button btn in buttons)
+                {
+                    btn.Left += dx;
+                    btn.Top += dy;
+                }
+                panStartPoint = e.Location;
+            }
+        }
+
+        private void CanvasMouseUp(object sender, MouseEventArgs e)
+        {
+            if (isPanning)
+            {
+                isPanning = false;
+                this.Cursor = Cursors.Default;
             }
         }
         private void InitializeColorMenu()
@@ -90,6 +141,8 @@ namespace Sandbox
         }
         private void InitializeRenamePanel()
         {
+            int x = 300;
+            int y = 125;
             renameCanvasSaveButton = new Button();
             renameCanvasSaveButton.Location = new Point(25, 50);
             renameCanvasSaveButton.Size = new Size(80, 30);
@@ -104,6 +157,7 @@ namespace Sandbox
 
             renamePanel = new Panel();
             renamePanel.Size = new Size(250, 100);
+            renamePanel.Location = new Point(x, y);
             renamePanel.Visible = false;
             renamePanel.BackColor = Color.White;
 
@@ -129,7 +183,30 @@ namespace Sandbox
             if (!string.IsNullOrWhiteSpace(renameTextBox.Text))
             {
                 currentCanvas.CanvasName = renameTextBox.Text;
+                _selectCanvas.updateCanvasNames(currentCanvas.CanvasNum, currentCanvas.CanvasName);
+                CanvasData targetCanvas = null;
+                foreach (CanvasData canvas in CanvasManager.AllCanvas)
+                {
+                    if (canvas.CanvasNum == currentCanvas.CanvasNum)
+                    {
+                        targetCanvas = canvas;
+                        break;
+                    }
+                }
+                if (targetCanvas != null)
+                {
+                    targetCanvas.CanvasName = currentCanvas.CanvasName;
+                    string path = Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "SandboxNotes.json"
+                    );
+                    string json = JsonSerializer.Serialize(CanvasManager.AllCanvas, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(path, json);
+                }
+                saveCanvas();
+                _selectCanvas.createCanvasSelections(_formNum);
                 renamePanel.Visible = false;
+
             }
         }
         private void onColorSquareClick(Object sender, MouseEventArgs e)
@@ -138,7 +215,6 @@ namespace Sandbox
             {
                 buttonTarget.BackColor = colorSquare.BackColor;
             }
-            //colorPanel.Visible = false;
         }
         private void Form1_Load(object sender, EventArgs e)
         { 
@@ -154,12 +230,6 @@ namespace Sandbox
             public string BackColor { get; set; }
         }
 
-        public class CanvasData //defines data for each canvas (canvas num and list of notes)
-        {
-            public int CanvasNum { get; set; }
-            public String CanvasName { get; set; }
-            public List<NoteData> Notes { get; set; }
-        }
 
 
         public void saveCanvas() //saves canvas with canvasdata
@@ -171,17 +241,16 @@ namespace Sandbox
                     _formNum = mdi.getNextCanvasNumber(); //assigns canvas number if new canvas (formnum = 0)
                 }
             }
-            List<CanvasData> allCanvas = new List<CanvasData>();
-            //string path = @"C:\Users\Aiden\source\repos\Sandbox\SandboxNotes.json";
-            string path = Path.Combine( //dynamically get path to file
+            //List<CanvasData> allCanvas = new List<CanvasData>();
+            string path = Path.Combine( 
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json"
             );
             string existingJson = File.ReadAllText(path);
-            allCanvas = JsonSerializer.Deserialize<List<CanvasData>>(existingJson);
-            if (allCanvas == null)
+            CanvasManager.AllCanvas = JsonSerializer.Deserialize<List<CanvasData>>(existingJson);
+            if (CanvasManager.AllCanvas == null)
             {
-                allCanvas = new List<CanvasData>();
+                CanvasManager.AllCanvas = new List<CanvasData>();
             }
             var data = buttons.Select(b => new NoteData
             {
@@ -195,19 +264,20 @@ namespace Sandbox
             var canvasData = new CanvasData
             {
                 CanvasNum = _formNum,
-                Notes = data
+                Notes = data,
+                CanvasName = currentCanvas.CanvasName
             };
 
-            int index = allCanvas.FindIndex(c => c.CanvasNum == _formNum); //overwrite old data is present, otherwise make new data
+            int index = CanvasManager.AllCanvas.FindIndex(c => c.CanvasNum == _formNum); //overwrite old data is present, otherwise make new data
             if (index >= 0)
             {
-                allCanvas[index]= canvasData;
+                CanvasManager.AllCanvas[index]= canvasData;
             }
             else
             {
-                allCanvas.Add(canvasData);
+                CanvasManager.AllCanvas.Add(canvasData);
             }
-            string json = JsonSerializer.Serialize(allCanvas, new JsonSerializerOptions { WriteIndented = true });
+            string json = JsonSerializer.Serialize(CanvasManager.AllCanvas, new JsonSerializerOptions { WriteIndented = true });
             string jsonWritePath = Path.Combine( //dynamically get path to file
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json"
@@ -220,23 +290,16 @@ namespace Sandbox
 
         public void restoreCanvas(int formNum) //loads canvas data using form num
         {
-            // string path = @"C:\Users\Aiden\source\repos\Sandbox\SandboxNotes.json";
-            //if (File.Exists(path)) return;
             string path = Path.Combine( 
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json"
             );
-            //if (!File.Exists(path))
-            //{
-            //    File.WriteAllText(path, "[]"); // create empty JSON file
-            //}
             string json = File.ReadAllText(path);
-            var allCanvas = JsonSerializer.Deserialize<List<CanvasData>>(json);
-            if(allCanvas == null)
+            if(CanvasManager.AllCanvas == null)
             {
                 return;
             }
-            var canvasData = allCanvas.FirstOrDefault(c =>  c.CanvasNum == formNum);
+            var canvasData = CanvasManager.AllCanvas.FirstOrDefault(c =>  c.CanvasNum == formNum);
             if (canvasData == null)
             {
                 return;
@@ -256,6 +319,7 @@ namespace Sandbox
                 newBtn.MouseUp += OnButton_MouseUp;
 
                 Controls.Add(newBtn);
+                newBtn.BringToFront();
                 buttons.Add(newBtn);
 
             }
@@ -343,7 +407,6 @@ namespace Sandbox
                 if (isDrag)
                 {
                     isDrag = false;
-                    //buttonTarget = null;
                 }
                 mouseDown = false;
             }
@@ -381,7 +444,11 @@ namespace Sandbox
 
         private void onRenameButtonClick(object sender, MouseEventArgs e)
         {
-
+            renamePanel.BringToFront();
+            renamePanel.Visible = true;
         }
+
+        
+
     }
 }
