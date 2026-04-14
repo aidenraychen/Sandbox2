@@ -28,27 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectCanvas));
             backButton = new Button();
+            NoCanvasLabel = new Label();
             SuspendLayout();
             // 
             // backButton
             // 
+            backButton.Image = (Image)resources.GetObject("backButton.Image");
             backButton.Location = new Point(0, 0);
-            backButton.Name = "Back";
-            backButton.Size = new Size(131, 131);
+            backButton.Margin = new Padding(4);
+            backButton.Name = "backButton";
+            backButton.Size = new Size(186, 179);
             backButton.TabIndex = 0;
             backButton.Text = "Back";
+            backButton.TextAlign = ContentAlignment.BottomCenter;
             backButton.UseVisualStyleBackColor = true;
-            backButton.MouseClick += OnBackButtonClick;
+            backButton.MouseClick += onBackButtonClick;
+            // 
+            // NoCanvasLabel
+            // 
+            NoCanvasLabel.ForeColor = Color.Black;
+            NoCanvasLabel.Location = new Point(392, 86);
+            NoCanvasLabel.Name = "NoCanvasLabel";
+            NoCanvasLabel.Size = new Size(440, 50);
+            NoCanvasLabel.TabIndex = 1;
+            NoCanvasLabel.Text = "There is no existed canvas.";
+            NoCanvasLabel.Visible = false;
             // 
             // SelectCanvas
             // 
-            AutoScaleDimensions = new SizeF(12F, 30F);
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1133, 615);
+            ControlBox = false;
+            Controls.Add(NoCanvasLabel);
             Controls.Add(backButton);
+            Margin = new Padding(4);
             Name = "SelectCanvas";
-            Text = "Form2";
+            Text = "Select Canvas";
             ResumeLayout(false);
         }
 
@@ -60,5 +78,6 @@
         #endregion
 
         private Button backButton;
+        private Label NoCanvasLabel;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Sandbox
 {
-    partial class NoteEditForm
+    partial class NoteEditDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NoteEditDialog));
             textBox1 = new TextBox();
             saveButton = new Button();
             cancelButton = new Button();
@@ -35,54 +36,53 @@
             // 
             // textBox1
             // 
-            //textBox1.Location = new Point(ClientRectangle.Width/2, ClientRectangle.Height / 2);
-            textBox1.Location = new Point(50,50);
+            textBox1.Location = new Point(55, 14);
+            textBox1.Margin = new Padding(5);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(278, 244);
-            textBox1.TabIndex = 0;
             textBox1.ScrollBars = ScrollBars.Vertical;
-            textBox1.ScrollToCaret();
-            textBox1.ShortcutsEnabled = true;
+            textBox1.Size = new Size(500, 480);
+            textBox1.TabIndex = 0;
             // 
             // saveButton
             // 
-            saveButton.Location = new Point(62,312);
-            saveButton.Name = "Save";
-            saveButton.Size = new Size(112, 34);
-            saveButton.TabIndex = 1;
+            saveButton.BackColor = Color.Navy;
+            saveButton.ForeColor = Color.White;
+            saveButton.Location = new Point(55, 538);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(200, 60);
+            saveButton.TabIndex = 4;
             saveButton.Text = "Save";
-            saveButton.UseVisualStyleBackColor = true;
+            saveButton.UseVisualStyleBackColor = false;
             saveButton.Click += onSave_Click;
             // 
-            // button2
+            // cancelButton
             // 
-            cancelButton.Location = new Point(180, 312);
-            cancelButton.Name = "Cancel";
-            cancelButton.Size = new Size(112, 34);
-            cancelButton.TabIndex = 2;
+            cancelButton.BackColor = Color.Navy;
+            cancelButton.ForeColor = Color.White;
+            cancelButton.Location = new Point(355, 538);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(200, 60);
+            cancelButton.TabIndex = 5;
             cancelButton.Text = "Cancel";
-            cancelButton.UseVisualStyleBackColor = true;
-            cancelButton.MouseClick += onCancel_Click;
+            cancelButton.UseVisualStyleBackColor = false;
+            cancelButton.Click += onCancel_Click;
             // 
-            // NoteEditForm
+            // NoteEditDialog
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F); //frankly, idk what this is
+            AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(380, 400);
+            ClientSize = new Size(655, 667);
             Controls.Add(saveButton);
             Controls.Add(cancelButton);
             Controls.Add(textBox1);
-            Name = "NoteEditForm";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(5);
+            Name = "NoteEditDialog";
             Text = "Text Input";
             ResumeLayout(false);
             PerformLayout();
         }
-
-        //private void DeleteButton_Click(object sender, EventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         #endregion
 

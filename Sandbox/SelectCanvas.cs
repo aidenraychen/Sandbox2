@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿
 namespace Sandbox
 {
     public partial class SelectCanvas : Form
@@ -22,82 +13,95 @@ namespace Sandbox
             this.AutoScroll = true; //seems to cause some lagging when disabling horizontal scroll bar
         }
 
-        private void OnBackButtonClick(object sender, MouseEventArgs e)
+        private void onBackButtonClick(object sender, MouseEventArgs e)
         {
             this.Hide();
         }
 
-        public void updateCanvasNames(int canvasNum, String canvasName)
+        public void UpdateCanvasTitles(string canvasUniqueId, string canvasTitle)
         {
             foreach (var btn in buttons)
             {
-                if (btn.Tag is int tag && tag == canvasNum+1)
+                if (btn.Tag is string tag && tag == canvasUniqueId)
                 {
-                    btn.Text = canvasName;
+                    btn.Text = canvasTitle;
                     break;
                 }
             }
         }
-        public void createCanvasSelections(int formNum) //creates a gray rectangle with canvas name for each new canvas saved
+
+
+        public void PopulateCanvasSelections() //creates a rectangle with canvas name for each new canvas saved
         {
-            if(buttons.Any(b=>b.Tag is int tag && tag == formNum))
+            foreach (Button b in buttons)
             {
-                return;
+                Controls.Remove(b);
             }
-            Panel horizontalLine = new Panel
+            buttons.Clear();
+            if (CanvasManager.AllCanvas.Any())
             {
-                BackColor = Color.Black,
-                Height = 1,
-                Width = 12000,
-                Location = new Point(150,buttons.Count * 150 + 75),
-            };
-            var btnNew = new Button
-            {
-                Size = new Size(12000, 150),
+                NoCanvasLabel.Visible = false;
 
-                Name = "btnNew" + buttons.Count,
+                foreach (CanvasData targetCanvas in CanvasManager.AllCanvas)
+                {
+                    var btnNew = new Button
+                    {
+                        Size = new Size(1000, 100),
 
-                FlatStyle = FlatStyle.Flat,
-                FlatAppearance = { BorderSize = 0 },
-                //BackColor = Color.Gray,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Location = new Point(150, buttons.Count * 150 + 75),
-                Padding = new Padding(30, 0, 0, 0),
+                        Name = "btnCanvasSelection" + buttons.Count,
+                        Text = string.IsNullOrEmpty(targetCanvas.CanvasTitle) ? targetCanvas.CanvasUniqueId : targetCanvas.CanvasTitle,
+                        Tag = targetCanvas.CanvasUniqueId,
 
-                Tag = formNum
-            };
-            CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasNum == formNum);
+                        FlatStyle = FlatStyle.Standard,
+                        FlatAppearance = { BorderSize = 0 },
+                        BackColor = Color.LightSkyBlue,
+                        TextAlign = ContentAlignment.MiddleLeft,
+                        Location = new Point(350, buttons.Count * 150 + 75),
+                        Padding = new Padding(30, 0, 0, 0)
+                    };
 
-            if (targetCanvas != null && !string.IsNullOrWhiteSpace(targetCanvas.CanvasName))
-            {
-                btnNew.Text = targetCanvas.CanvasName;
+                    btnNew.SendToBack();
+                    btnNew.MouseClick += onCanvasButtonClick;
+                    Controls.Add(btnNew);
+                    buttons.Add(btnNew);
+                }
             }
-            else
-            {
-                btnNew.Text = $"New Note {formNum}";
+            else 
+            { 
+                NoCanvasLabel.Visible = true;
             }
-            Controls.Add(btnNew);
-            Controls.Add(horizontalLine);
-            buttons.Add(btnNew);
-            btnNew.SendToBack();
-            btnNew.MouseClick += onCanvasButtonClick;
+        }
+
+        public void DeleteCanvas(string canvasUniqueId)
+        {
+            CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasUniqueId == canvasUniqueId);
+            if (targetCanvas != null)
+            {
+                CanvasManager.AllCanvas.Remove(targetCanvas);
+            }
         }
 
         private void onCanvasButtonClick(object sender, MouseEventArgs e) //opens saved canvas once button clicked
         {
             var btnTarget = (Button)sender;
             System.Diagnostics.Debug.WriteLine($"Button Tag: {btnTarget.Tag}");
-            if (btnTarget != null && btnTarget.Tag is int indexNum)
+            if (btnTarget != null && btnTarget.Tag is string canvasUniqueId)
             {
                 CanvasManager.EnsureLoaded();
-                CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasNum == indexNum);
-                frmCanvas canvasToBeOpened = new frmCanvas(this, indexNum, targetCanvas);
+
+                Canvas canvasToBeOpened = new Canvas();
                 canvasToBeOpened.MdiParent = this.MdiParent;
-                canvasToBeOpened.restoreCanvas(indexNum);
+                canvasToBeOpened.InitCanvas(this, canvasUniqueId, false);
                 canvasToBeOpened.Show();
+                canvasToBeOpened.BringToFront();
+                canvasToBeOpened.TopMost = true;
+                canvasToBeOpened.WindowState = FormWindowState.Maximized;
+
                 this.Hide();
             }
         }
+
+
         //link the button to opening the form
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
@@ -112,5 +116,6 @@ namespace Sandbox
                 base.OnFormClosing(e);
             }
         }
+
     }
 }

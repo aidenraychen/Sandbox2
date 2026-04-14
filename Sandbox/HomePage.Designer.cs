@@ -32,22 +32,11 @@
             Button openCanvas;
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
             this.FormBorderStyle = FormBorderStyle.None;
             this.ControlBox = false;
+            this.Size= this.ClientSize;
             this.Text = "HomePage";
-            for (int i = 1; i < 4; i++)
-            {
-                Panel horizontalLine = new Panel
-                {
-                    BackColor = Color.Black,
-                    Height = 1,
-                    Width = 12000,
-                    Location = new Point(0, i * 150 + 75),
-
-                };
-                Controls.Add(horizontalLine);
-            }
+          
             Label welcomeLabel = new Label
             {
                 Text = "Welcome to Sandbox",
@@ -67,9 +56,9 @@
                 Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point),
                 FlatStyle = FlatStyle.Flat,
                 FlatAppearance = { BorderSize = 0 },
-                //BackColor = Color.Gray,
+                BackColor = Color.LightCyan,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Location = new Point(0, 225),
+                Location = new Point(0, 300),
                 Padding = new Padding(30, 0, 0, 0),
             };
 
@@ -82,9 +71,9 @@
                 Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point),
                 FlatStyle = FlatStyle.Flat,
                 FlatAppearance = { BorderSize = 0 },
-                //BackColor = Color.Gray,
+                BackColor = Color.PaleTurquoise,
                 TextAlign = ContentAlignment.MiddleLeft,
-                Location = new Point(0, 375),
+                Location = new Point(0, 450),
                 Padding = new Padding(30, 0, 0, 0),
             };
             openCanvas.MouseClick += OpenFile;
