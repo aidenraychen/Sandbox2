@@ -115,7 +115,7 @@ namespace Sandbox
                 CanvasData newCanvasData = new CanvasData()
                 {
                     CanvasUniqueId = CanvasData.generateCanvasUniqueId(),
-                    CanvasTitle = string.Empty, //+1 necessary because this is before childFormNumber is updated, so it's 1 less than required
+                    CanvasTitle = string.Empty, 
                 };
                 _currentCanvasData = newCanvasData;
                 this.Text = "New";
