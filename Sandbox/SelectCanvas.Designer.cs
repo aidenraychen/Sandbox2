@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectCanvas));
             backButton = new Button();
             NoCanvasLabel = new Label();
+            panContainer = new Panel();
+            label1 = new Label();
+            panContainer.SuspendLayout();
             SuspendLayout();
             // 
             // backButton
@@ -56,21 +59,43 @@
             NoCanvasLabel.Text = "There is no existed canvas.";
             NoCanvasLabel.Visible = false;
             // 
+            // panContainer
+            // 
+            panContainer.AutoScroll = true;
+            panContainer.BackColor = Color.FromArgb(255, 224, 192);
+            panContainer.Controls.Add(label1);
+            panContainer.Dock = DockStyle.Right;
+            panContainer.Location = new Point(194, 0);
+            panContainer.Margin = new Padding(4);
+            panContainer.Name = "panContainer";
+            panContainer.Size = new Size(915, 912);
+            panContainer.TabIndex = 2;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(4, 12);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(451, 54);
+            label1.TabIndex = 0;
+            label1.Text = "Open an existing canvas";
+            // 
             // SelectCanvas
             // 
-            AutoScaleDimensions = new SizeF(17F, 41F);
-            AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1636, 912);
+            ClientSize = new Size(1109, 912);
             ControlBox = false;
+            Controls.Add(panContainer);
             Controls.Add(NoCanvasLabel);
             Controls.Add(backButton);
             Margin = new Padding(4);
             Name = "SelectCanvas";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Select Canvas";
-            
-
+            panContainer.ResumeLayout(false);
+            panContainer.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -83,5 +108,7 @@
 
         private Button backButton;
         private Label NoCanvasLabel;
+        private Panel panContainer;
+        private Label label1;
     }
 }

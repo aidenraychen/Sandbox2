@@ -17,9 +17,11 @@ namespace Sandbox
 
         private void onFormResized(object sender, EventArgs e)
         {
+            this.panContainer.Width = this.Width - 250;
+            this.panContainer.Height = this.Height - 120;
             foreach (Button btn in _canvasButtons)
             {
-                btn.Width = this.Width - 220;
+                btn.Width = this.panContainer.Width - 60;
                 if (btn.Width < BUTTON_MIN_WIDTH)
                 {
                     btn.Width = BUTTON_MIN_WIDTH;
@@ -51,7 +53,7 @@ namespace Sandbox
             SuspendLayout();
             foreach (Button btn in _canvasButtons)
             {
-                Controls.Remove(btn);
+                panContainer.Controls.Remove(btn);
             }
             _canvasButtons.Clear();
 
@@ -63,8 +65,8 @@ namespace Sandbox
                 {
                     var btnNew = new Button
                     {
-                        Size = new Size(this.Width - 220, 150),
-
+                        Size = new Size(this.panContainer.Width - 60, 150),
+                        Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0),
                         Name = "btnCanvasSelection" + _canvasButtons.Count,
                         Text =  string.IsNullOrEmpty(targetCanvas.CanvasTitle) ? targetCanvas.CanvasUniqueId : targetCanvas.CanvasTitle,
                         Tag = targetCanvas.CanvasUniqueId,
@@ -74,7 +76,7 @@ namespace Sandbox
                         
                         BackColor = Color.LightSkyBlue,
                         TextAlign = ContentAlignment.MiddleLeft,
-                        Location = new Point(200, _canvasButtons.Count * 150 + 75),
+                        Location = new Point(0, _canvasButtons.Count * 150 + 75),
                         Padding = new Padding(30, 0, 0, 0)
                     };
 
@@ -85,7 +87,8 @@ namespace Sandbox
 
                     btnNew.SendToBack();
                     btnNew.MouseClick += onCanvasButtonClick;
-                    Controls.Add(btnNew);
+                    panContainer.Controls.Add(btnNew);
+                    //Controls.Add(btnNew);
                     _canvasButtons.Add(btnNew);
                 }
             }

@@ -51,7 +51,7 @@
             {
                 Size = new Size(12000, 150),
 
-                Name = "Create a new canvas",
+                Name = "lblNew",
                 Text = "Create a new canvas",
                 Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point),
                 FlatStyle = FlatStyle.Flat,
@@ -66,7 +66,7 @@
             {
                 Size = new Size(12000, 150),
 
-                Name = "Open an existing canvas",
+                Name = "lblOpen",
                 Text = "Open an existing canvas",
                 Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point),
                 FlatStyle = FlatStyle.Flat,

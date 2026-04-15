@@ -91,6 +91,7 @@
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1790, 1428);
+
             Controls.Add(statusStrip);
             Controls.Add(menuStrip);
             Icon = (Icon)resources.GetObject("$this.Icon");
