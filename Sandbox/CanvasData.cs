@@ -1,5 +1,4 @@
-﻿using static Sandbox.Canvas;
-
+﻿
 namespace Sandbox
 {
     public class CanvasData //defines data for each canvas (canvas num and list of notes)

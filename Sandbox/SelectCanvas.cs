@@ -49,8 +49,8 @@ namespace Sandbox
 
         public void PopulateCanvasSelections() //creates a rectangle with canvas name for each new canvas saved
         {
-            
             SuspendLayout();
+            CanvasManager.EnsureLoaded();
             foreach (Button btn in _canvasButtons)
             {
                 panContainer.Controls.Remove(btn);
@@ -88,7 +88,6 @@ namespace Sandbox
                     btnNew.SendToBack();
                     btnNew.MouseClick += onCanvasButtonClick;
                     panContainer.Controls.Add(btnNew);
-                    //Controls.Add(btnNew);
                     _canvasButtons.Add(btnNew);
                 }
             }
@@ -113,8 +112,6 @@ namespace Sandbox
             System.Diagnostics.Debug.WriteLine($"Button Tag: {btnTarget.Tag}");
             if (btnTarget != null && btnTarget.Tag is string canvasUniqueId)
             {
-                CanvasManager.EnsureLoaded();
-
                 Canvas canvasToBeOpened = new Canvas();
                 canvasToBeOpened.MdiParent = this.MdiParent;
                 canvasToBeOpened.InitCanvas(this, canvasUniqueId, false);

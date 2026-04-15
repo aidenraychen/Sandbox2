@@ -1,6 +1,6 @@
 
 using System.Text.Json;
-using Windows.UI.Xaml.Shapes;
+
 
 namespace Sandbox
 {
@@ -124,7 +124,7 @@ namespace Sandbox
             }
             else
             {
-                loadCanvasData(canvasUniqueId);
+                LoadCanvasData(canvasUniqueId);
                 renameCanvasButton.Enabled = true;
             }
 
@@ -216,7 +216,7 @@ namespace Sandbox
             }
         }
 
-        public void loadCanvasData(string canvasUniqueId) //loads canvas data using canvas unique name
+        public void LoadCanvasData(string canvasUniqueId) //loads canvas data using canvas unique name
         {
             // load data
             string path = System.IO.Path.Combine(

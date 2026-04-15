@@ -62,7 +62,7 @@
             // panContainer
             // 
             panContainer.AutoScroll = true;
-            panContainer.BackColor = Color.FromArgb(255, 224, 192);
+            panContainer.BackColor = SystemColors.Control;
             panContainer.Controls.Add(label1);
             panContainer.Dock = DockStyle.Right;
             panContainer.Location = new Point(194, 0);

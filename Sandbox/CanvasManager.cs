@@ -8,7 +8,7 @@ namespace Sandbox
     public static class CanvasManager
     {
        
-        public static List<CanvasData> AllCanvas { get; set; } = new List<CanvasData>();
+        public static List<CanvasData> AllCanvas { get; set; } = null;
 
         public static void EnsureLoaded()
         {
