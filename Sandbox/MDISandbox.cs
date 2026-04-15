@@ -35,20 +35,6 @@ namespace Sandbox
             CanvasManager.EnsureLoaded(); 
             selectionScreen = new SelectCanvas(); //creates select canvas upon load, since user may save a form before opening the select canvas window
 
-            //string path = Path.Combine( //dynamically get path to file
-            //    AppDomain.CurrentDomain.BaseDirectory,
-            //    "SandboxNotes.json"
-            //);
-
-            //if (File.Exists(path))
-            //{
-            //    string json = File.ReadAllText(path);
-            //    CanvasManager.AllCanvas = JsonSerializer.Deserialize<List<CanvasData>>(json) ?? new List<CanvasData>();
-            //}
-            //else
-            //{
-            //    CanvasManager.AllCanvas = new List<CanvasData>();
-            //}
         }
 
 

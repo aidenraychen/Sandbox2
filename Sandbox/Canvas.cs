@@ -1,4 +1,3 @@
-
 using System.Text.Json;
 
 
@@ -28,7 +27,7 @@ namespace Sandbox
             this.MouseUp += CanvasMouseUp;
         }
 
-        private void CanvasMouseDown(object sender, MouseEventArgs e)
+        private void CanvasMouseDown(object? sender, MouseEventArgs e)
         {
 
             if (e.Button == MouseButtons.Left)
@@ -39,7 +38,7 @@ namespace Sandbox
             }
         }
 
-        private void CanvasMouseMove(object sender, MouseEventArgs e)
+        private void CanvasMouseMove(object? sender, MouseEventArgs e)
         {
             if (isPanning)
             {
@@ -54,7 +53,7 @@ namespace Sandbox
             }
         }
 
-        private void CanvasMouseUp(object sender, MouseEventArgs e)
+        private void CanvasMouseUp(object? sender, MouseEventArgs e)
         {
             if (isPanning)
             {
@@ -132,7 +131,7 @@ namespace Sandbox
             _canvasUniqueId = canvasUniqueId;
         }
 
-        private void onColorSquareClick(Object sender, MouseEventArgs e)
+        private void onColorSquareClick(object? sender, MouseEventArgs e)
         {
             if (sender is Button colorSquare)
             {
@@ -203,7 +202,7 @@ namespace Sandbox
         private void SaveCanvasData() //saves canvas data to JSON file
         {
             string json = JsonSerializer.Serialize(CanvasManager.AllCanvas, new JsonSerializerOptions { WriteIndented = true });
-            string jsonWritePath = System.IO.Path.Combine( //dynamically get path to file
+            string jsonWritePath = System.IO.Path.Combine( 
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json");
             if (File.Exists(jsonWritePath))
@@ -212,22 +211,12 @@ namespace Sandbox
             }
             else
             {
-                File.WriteAllText(jsonWritePath, "[]"); // create empty JSON file //it doesnt create the file for some reason
+                File.WriteAllText(jsonWritePath, "[]"); // create empty JSON file
             }
         }
 
         public void LoadCanvasData(string canvasUniqueId) //loads canvas data using canvas unique name
         {
-            // load data
-            string path = System.IO.Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "SandboxNotes.json"
-            );
-            string json = File.ReadAllText(path);
-            if (CanvasManager.AllCanvas == null)
-            {
-                return;
-            }
             var canvasData = CanvasManager.AllCanvas
                 .FirstOrDefault(c => c.CanvasUniqueId == canvasUniqueId);
             if (canvasData == null)
@@ -260,7 +249,7 @@ namespace Sandbox
             }
         }
 
-        public void onCreateNote_Click(object sender, EventArgs e) //make new note
+        public void onCreateNote_Click(object? sender, EventArgs e) //make new note
         {
             var btnNew = new Button
             {
@@ -277,11 +266,7 @@ namespace Sandbox
             btnNew.MouseDown += onButton_MouseDown;
             btnNew.MouseMove += onButton_MouseMove;
             btnNew.MouseUp += onButton_MouseUp;
-            string path = System.IO.Path.Combine( //dynamically get path to file
-                AppDomain.CurrentDomain.BaseDirectory,
-                "SandboxNoteText.txt"
-            );
-            string noteText = path;
+
             Controls.Add(btnNew);
 
             buttons.Add(btnNew);
@@ -289,12 +274,12 @@ namespace Sandbox
             ResumeLayout();
         }
 
-        private void onNoteClick(object sender, MouseEventArgs e) //gets last mouse target
+        private void onNoteClick(object? sender, MouseEventArgs e) //gets last mouse target
         {
             buttonTarget = (Button)sender;
         }
 
-        private void onButton_MouseDown(object sender, MouseEventArgs e) //defines mouse actions on notes
+        private void onButton_MouseDown(object? sender, MouseEventArgs e) //defines mouse actions on notes
         {
             Point screenPos = PointToClient(MousePosition);
             if (e.Button == MouseButtons.Left)
@@ -315,7 +300,7 @@ namespace Sandbox
             }
         }
 
-        private void onButton_MouseMove(object sender, MouseEventArgs e) //can drag notes
+        private void onButton_MouseMove(object? sender, MouseEventArgs e) //can drag notes
         {
             Point screenPos = PointToClient(MousePosition);
             if (isDrag && buttonTarget != null)
@@ -326,7 +311,7 @@ namespace Sandbox
             }
         }
 
-        private void onButton_MouseUp(object sender, MouseEventArgs e) //helps with drag function
+        private void onButton_MouseUp(object? sender, MouseEventArgs e) //helps with drag function
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -337,7 +322,7 @@ namespace Sandbox
             }
         }
 
-        public void ShowNoteEditForm(object sender, EventArgs e) //shows new form to edit note text
+        public void ShowNoteEditForm(object? sender, EventArgs e) //shows new form to edit note text
         {
             if (this.MdiParent != null)
             {
@@ -350,19 +335,19 @@ namespace Sandbox
 
         }
 
-        public void DeleteNote(object sender, EventArgs e) //delete
+        public void DeleteNote(object? sender, EventArgs e) //delete
         {
             Controls.Remove(buttonTarget);
             buttons.Remove(buttonTarget);
         }
 
-        private void onChooseColorClick(object sender, MouseEventArgs e) //can choose colors
+        private void onChooseColorClick(object? sender, MouseEventArgs e) //can choose colors
         {
             colorPanel.BringToFront();
             colorPanel.Visible = true;
         }
 
-        private void onSaveCanvas_Click(object sender, MouseEventArgs e) //makes select canvas button on Select Canvas once save is clicked
+        private void onSaveCanvas_Click(object? sender, MouseEventArgs e) //makes select canvas button on Select Canvas once save is clicked
         {
             if (string.IsNullOrEmpty(_canvasUniqueId))
             {
@@ -386,7 +371,7 @@ namespace Sandbox
             }
         }
 
-        private void onRenameCanvasClick(object sender, MouseEventArgs e)
+        private void onRenameCanvasClick(object? sender, MouseEventArgs e)
         {
             CanvasNameDialog dialog = new CanvasNameDialog();
             dialog.Text = "Rename Canvas";
@@ -404,12 +389,12 @@ namespace Sandbox
             }
         }
 
-        private void onCloseCanvasClick(object sender, MouseEventArgs e)
+        private void onCloseCanvasClick(object? sender, MouseEventArgs e)
         {
             this.Close();
         }
 
-        private void onDeleteCanvasClick(object sender, MouseEventArgs e)
+        private void onDeleteCanvasClick(object? sender, MouseEventArgs e)
         {
             CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasUniqueId == _canvasUniqueId);
             if (targetCanvas != null)
