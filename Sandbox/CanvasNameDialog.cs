@@ -19,17 +19,5 @@ namespace Sandbox
             renameTextBox.Text = value;
         }
 
-        private void onRenameCanvasSaveButtonClick(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void onRenameCanvasCancelButtonClick(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
-        }
-
     }
 }

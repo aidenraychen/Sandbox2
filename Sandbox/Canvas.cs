@@ -119,10 +119,13 @@ namespace Sandbox
                 };
                 _currentCanvasData = newCanvasData;
                 this.Text = "New";
+                renameCanvasButton.Enabled = false;
+
             }
             else
             {
                 loadCanvasData(canvasUniqueId);
+                renameCanvasButton.Enabled = true;
             }
 
             _selectCanvas = selectCanvas;
@@ -367,11 +370,14 @@ namespace Sandbox
                 dialog.Text = "Name the new Canvas";
                 var tempName = CanvasData.generateCanvasUniqueId();
                 dialog.setCanvasTitle(tempName);
+                dialog.StartPosition = FormStartPosition.CenterScreen;
+
                 if (dialog.ShowDialog() == DialogResult.OK) 
                 {
                     _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
                     InsertCanvasData();
                     this.Text = _currentCanvasData.CanvasTitle;
+                    renameCanvasButton.Enabled = true;
                 }
             }
             else
@@ -385,6 +391,7 @@ namespace Sandbox
             CanvasNameDialog dialog = new CanvasNameDialog();
             dialog.Text = "Rename Canvas";
             dialog.setCanvasTitle(_currentCanvasData.CanvasTitle);
+
             dialog.StartPosition = FormStartPosition.CenterScreen;
 
             if (dialog.ShowDialog() == DialogResult.OK)

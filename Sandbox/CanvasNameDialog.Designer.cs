@@ -63,7 +63,7 @@
             renameCanvasSaveButton.Text = "Save";
             renameCanvasSaveButton.UseVisualStyleBackColor = false;
             renameCanvasSaveButton.DialogResult = DialogResult.OK;
-            //renameCanvasSaveButton.Click += onRenameCanvasSaveButtonClick;
+            
             // 
             // renameCanvasCancelButton
             // 
@@ -76,7 +76,7 @@
             renameCanvasCancelButton.Text = "Cancel";
             renameCanvasCancelButton.UseVisualStyleBackColor = false;
             renameCanvasCancelButton.DialogResult = DialogResult.Cancel;
-            //renameCanvasCancelButton.Click += onRenameCanvasCancelButtonClick;
+            
             // 
             // CanvasNameDialog
             // 
