@@ -4,6 +4,7 @@ namespace Sandbox
     public partial class SelectCanvas : Form
     {
         List<Button> _canvasButtons = new List<Button>();
+        const int BUTTON_MIN_WIDTH = 600;
         public SelectCanvas()
         {
             InitializeComponent();
@@ -18,7 +19,11 @@ namespace Sandbox
         {
             foreach (Button btn in _canvasButtons)
             {
-                btn.Width = this.Width - 600;
+                btn.Width = this.Width - 220;
+                if (btn.Width < BUTTON_MIN_WIDTH)
+                {
+                    btn.Width = BUTTON_MIN_WIDTH;
+                }
             }
         }
 
@@ -58,7 +63,7 @@ namespace Sandbox
                 {
                     var btnNew = new Button
                     {
-                        Size = new Size(this.Width - 600, 150),
+                        Size = new Size(this.Width - 220, 150),
 
                         Name = "btnCanvasSelection" + _canvasButtons.Count,
                         Text =  string.IsNullOrEmpty(targetCanvas.CanvasTitle) ? targetCanvas.CanvasUniqueId : targetCanvas.CanvasTitle,
@@ -69,9 +74,14 @@ namespace Sandbox
                         
                         BackColor = Color.LightSkyBlue,
                         TextAlign = ContentAlignment.MiddleLeft,
-                        Location = new Point(350, _canvasButtons.Count * 150 + 75),
+                        Location = new Point(200, _canvasButtons.Count * 150 + 75),
                         Padding = new Padding(30, 0, 0, 0)
                     };
+
+                    if (btnNew.Width < BUTTON_MIN_WIDTH)
+                    {
+                        btnNew.Width = BUTTON_MIN_WIDTH;
+                    }
 
                     btnNew.SendToBack();
                     btnNew.MouseClick += onCanvasButtonClick;

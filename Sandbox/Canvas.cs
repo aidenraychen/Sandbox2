@@ -118,7 +118,7 @@ namespace Sandbox
                     CanvasTitle = string.Empty, //+1 necessary because this is before childFormNumber is updated, so it's 1 less than required
                 };
                 _currentCanvasData = newCanvasData;
-                this.Text = "[New]";
+                this.Text = "New";
             }
             else
             {
@@ -365,11 +365,13 @@ namespace Sandbox
             {
                 CanvasNameDialog dialog = new CanvasNameDialog();
                 dialog.Text = "Name the new Canvas";
-
-                if (dialog.ShowDialog() == DialogResult.OK) ;
+                var tempName = CanvasData.generateCanvasUniqueId();
+                dialog.setCanvasTitle(tempName);
+                if (dialog.ShowDialog() == DialogResult.OK) 
                 {
                     _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
                     InsertCanvasData();
+                    this.Text = _currentCanvasData.CanvasTitle;
                 }
             }
             else
@@ -390,6 +392,8 @@ namespace Sandbox
                 _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
                 UpdateCanvasData();
                 _selectCanvas.UpdateCanvasTitles(_currentCanvasData.CanvasUniqueId, _currentCanvasData.CanvasTitle);
+                
+                this.Text = _currentCanvasData.CanvasTitle;
             }
         }
 
@@ -397,6 +401,7 @@ namespace Sandbox
         {
             this.Close();
         }
+
         private void onDeleteCanvasClick(object sender, MouseEventArgs e)
         {
             CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasUniqueId == _canvasUniqueId);

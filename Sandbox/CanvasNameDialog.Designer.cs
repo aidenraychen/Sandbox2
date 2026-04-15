@@ -49,36 +49,38 @@
             renameTextBox.BorderStyle = BorderStyle.FixedSingle;
             renameTextBox.Location = new Point(180, 50);
             renameTextBox.Name = "renameTextBox";
-            renameTextBox.Size = new Size(350, 47);
+            renameTextBox.Size = new Size(629, 47);
             renameTextBox.TabIndex = 1;
             // 
             // renameCanvasSaveButton
             // 
             renameCanvasSaveButton.BackColor = Color.Navy;
             renameCanvasSaveButton.ForeColor = Color.White;
-            renameCanvasSaveButton.Location = new Point(50, 150);
+            renameCanvasSaveButton.Location = new Point(236, 149);
             renameCanvasSaveButton.Name = "renameCanvasSaveButton";
             renameCanvasSaveButton.Size = new Size(200, 60);
             renameCanvasSaveButton.TabIndex = 2;
             renameCanvasSaveButton.Text = "Save";
             renameCanvasSaveButton.UseVisualStyleBackColor = false;
-            renameCanvasSaveButton.MouseClick += onRenameCanvasSaveButtonClick;
+            renameCanvasSaveButton.DialogResult = DialogResult.OK;
+            //renameCanvasSaveButton.Click += onRenameCanvasSaveButtonClick;
             // 
             // renameCanvasCancelButton
             // 
             renameCanvasCancelButton.BackColor = Color.Navy;
             renameCanvasCancelButton.ForeColor = Color.White;
-            renameCanvasCancelButton.Location = new Point(350, 150);
+            renameCanvasCancelButton.Location = new Point(536, 149);
             renameCanvasCancelButton.Name = "renameCanvasCancelButton";
             renameCanvasCancelButton.Size = new Size(200, 60);
             renameCanvasCancelButton.TabIndex = 3;
             renameCanvasCancelButton.Text = "Cancel";
             renameCanvasCancelButton.UseVisualStyleBackColor = false;
-            renameCanvasCancelButton.MouseClick += onRenameCanvasCancelButtonClick;
+            renameCanvasCancelButton.DialogResult = DialogResult.Cancel;
+            //renameCanvasCancelButton.Click += onRenameCanvasCancelButtonClick;
             // 
             // CanvasNameDialog
             // 
-            ClientSize = new Size(627, 260);
+            ClientSize = new Size(901, 260);
             Controls.Add(renameLabel);
             Controls.Add(renameTextBox);
             Controls.Add(renameCanvasSaveButton);
