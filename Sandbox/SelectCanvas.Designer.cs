@@ -60,13 +60,17 @@
             // 
             AutoScaleDimensions = new SizeF(17F, 41F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1133, 615);
+            BackColor = SystemColors.Control;
+            ClientSize = new Size(1636, 912);
             ControlBox = false;
             Controls.Add(NoCanvasLabel);
             Controls.Add(backButton);
             Margin = new Padding(4);
             Name = "SelectCanvas";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Select Canvas";
+            
+
             ResumeLayout(false);
         }
 

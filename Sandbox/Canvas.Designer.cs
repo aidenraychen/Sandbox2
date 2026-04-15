@@ -144,7 +144,7 @@
             // 
             colorMenu.ImageScalingSize = new Size(40, 40);
             colorMenu.Name = "colorMenu";
-            colorMenu.Size = new Size(61, 4);
+            colorMenu.Size = new Size(41, 4);
             // 
             // Canvas
             // 

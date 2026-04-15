@@ -73,9 +73,8 @@ namespace Sandbox
             selectionScreen.PopulateCanvasSelections();
 
             selectionScreen.MdiParent = this;
-            selectionScreen.Text = "Select Canvas";
             selectionScreen.WindowState = FormWindowState.Maximized;
-            selectionScreen.AutoScroll = true;
+            selectionScreen.Text = "Select Canvas";
             selectionScreen.TopMost = true;
             selectionScreen.Show();
 

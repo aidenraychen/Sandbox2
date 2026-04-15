@@ -3,7 +3,7 @@ namespace Sandbox
 {
     public partial class SelectCanvas : Form
     {
-        List<Button> buttons = new List<Button>();
+        List<Button> _canvasButtons = new List<Button>();
         public SelectCanvas()
         {
             InitializeComponent();
@@ -11,6 +11,15 @@ namespace Sandbox
             this.AutoScroll = false;
             this.VerticalScroll.Visible = false;
             this.AutoScroll = true; //seems to cause some lagging when disabling horizontal scroll bar
+            this.Resize += onFormResized;
+        }
+
+        private void onFormResized(object sender, EventArgs e)
+        {
+            foreach (Button btn in _canvasButtons)
+            {
+                btn.Width = this.Width - 600;
+            }
         }
 
         private void onBackButtonClick(object sender, MouseEventArgs e)
@@ -20,7 +29,7 @@ namespace Sandbox
 
         public void UpdateCanvasTitles(string canvasUniqueId, string canvasTitle)
         {
-            foreach (var btn in buttons)
+            foreach (var btn in _canvasButtons)
             {
                 if (btn.Tag is string tag && tag == canvasUniqueId)
                 {
@@ -33,11 +42,14 @@ namespace Sandbox
 
         public void PopulateCanvasSelections() //creates a rectangle with canvas name for each new canvas saved
         {
-            foreach (Button b in buttons)
+            
+            SuspendLayout();
+            foreach (Button btn in _canvasButtons)
             {
-                Controls.Remove(b);
+                Controls.Remove(btn);
             }
-            buttons.Clear();
+            _canvasButtons.Clear();
+
             if (CanvasManager.AllCanvas.Any())
             {
                 NoCanvasLabel.Visible = false;
@@ -46,24 +58,25 @@ namespace Sandbox
                 {
                     var btnNew = new Button
                     {
-                        Size = new Size(1000, 100),
+                        Size = new Size(this.Width - 600, 150),
 
-                        Name = "btnCanvasSelection" + buttons.Count,
-                        Text = string.IsNullOrEmpty(targetCanvas.CanvasTitle) ? targetCanvas.CanvasUniqueId : targetCanvas.CanvasTitle,
+                        Name = "btnCanvasSelection" + _canvasButtons.Count,
+                        Text =  string.IsNullOrEmpty(targetCanvas.CanvasTitle) ? targetCanvas.CanvasUniqueId : targetCanvas.CanvasTitle,
                         Tag = targetCanvas.CanvasUniqueId,
 
-                        FlatStyle = FlatStyle.Standard,
-                        FlatAppearance = { BorderSize = 0 },
+                        FlatStyle = FlatStyle.Flat,
+                        FlatAppearance = { BorderSize = 1 },
+                        
                         BackColor = Color.LightSkyBlue,
                         TextAlign = ContentAlignment.MiddleLeft,
-                        Location = new Point(350, buttons.Count * 150 + 75),
+                        Location = new Point(350, _canvasButtons.Count * 150 + 75),
                         Padding = new Padding(30, 0, 0, 0)
                     };
 
                     btnNew.SendToBack();
                     btnNew.MouseClick += onCanvasButtonClick;
                     Controls.Add(btnNew);
-                    buttons.Add(btnNew);
+                    _canvasButtons.Add(btnNew);
                 }
             }
             else 

@@ -17,8 +17,8 @@ namespace Sandbox
         bool isPanning = false;
         Point panStartPoint;
 
-        
-        public Canvas() 
+
+        public Canvas()
         {
             InitializeComponent();
             InitializeColorMenu();
@@ -66,7 +66,7 @@ namespace Sandbox
         {
             int colorSquareSize = 60;
             colorPanel = new Panel();
-            colorPanel.Size = new Size(colorSquareSize*6+62, colorSquareSize+10);
+            colorPanel.Size = new Size(colorSquareSize * 6 + 62, colorSquareSize + 10);
             colorPanel.BorderStyle = BorderStyle.FixedSingle;
             colorPanel.Location = new Point(120, 120);
             colorPanel.Visible = false;
@@ -90,14 +90,14 @@ namespace Sandbox
                 colorSquare.Location = new Point(x, 5);
                 colorSquare.MouseClick += onColorSquareClick;
                 colorPanel.Controls.Add(colorSquare);
-                x += colorSquareSize+2;
+                x += colorSquareSize + 2;
             }
             var exitButton = new Button();
             exitButton.BackColor = Color.Red;
             exitButton.ForeColor = Color.White;
             exitButton.Size = new Size(40, 60);
-            exitButton.Location = new Point (5 + colors.Length * (colorSquareSize + 2), 5);
-            exitButton.Text = "X";      
+            exitButton.Location = new Point(5 + colors.Length * (colorSquareSize + 2), 5);
+            exitButton.Text = "X";
             exitButton.Font = new Font("Arial", 12);
             exitButton.TextAlign = ContentAlignment.MiddleCenter;
             exitButton.Padding = new Padding(0);
@@ -106,9 +106,9 @@ namespace Sandbox
             this.Controls.Add(colorPanel);
         }
 
-        public void InitCanvas(SelectCanvas selectCanvas, 
+        public void InitCanvas(SelectCanvas selectCanvas,
             string canvasUniqueId,
-            bool isNew) 
+            bool isNew)
         {
             if (isNew)
             {
@@ -120,9 +120,9 @@ namespace Sandbox
                 _currentCanvasData = newCanvasData;
                 this.Text = "[New]";
             }
-            else 
-            { 
-                loadCanvasData(canvasUniqueId); 
+            else
+            {
+                loadCanvasData(canvasUniqueId);
             }
 
             _selectCanvas = selectCanvas;
@@ -136,17 +136,17 @@ namespace Sandbox
                 buttonTarget.BackColor = colorSquare.BackColor;
             }
         }
-     
+
         public void InsertCanvasData() //saves canvas with canvasdata
         {
-            if (string.IsNullOrEmpty ( _canvasUniqueId ))
+            if (string.IsNullOrEmpty(_canvasUniqueId))
             {
-                if(this.MdiParent is MDISandbox mdi)
+                if (this.MdiParent is MDISandbox mdi)
                 {
                     _canvasUniqueId = CanvasData.generateCanvasUniqueId(); //assigns canvas id from createDateTime
                 }
             }
-         
+
             if (CanvasManager.AllCanvas == null)
             {
                 CanvasManager.AllCanvas = new List<CanvasData>();
@@ -163,9 +163,9 @@ namespace Sandbox
             }).ToList();
 
             _currentCanvasData.Notes = noteData;
-          
+
             CanvasManager.AllCanvas.Add(_currentCanvasData);
-            
+
             SaveCanvasData();
 
             System.Diagnostics.Debug.WriteLine($"Inserting Canvas: {_canvasUniqueId}");
@@ -216,22 +216,22 @@ namespace Sandbox
         public void loadCanvasData(string canvasUniqueId) //loads canvas data using canvas unique name
         {
             // load data
-            string path = System.IO.Path.Combine( 
+            string path = System.IO.Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
                 "SandboxNotes.json"
             );
             string json = File.ReadAllText(path);
-            if(CanvasManager.AllCanvas == null)
+            if (CanvasManager.AllCanvas == null)
             {
                 return;
             }
             var canvasData = CanvasManager.AllCanvas
-                .FirstOrDefault(c =>  c.CanvasUniqueId == canvasUniqueId);
+                .FirstOrDefault(c => c.CanvasUniqueId == canvasUniqueId);
             if (canvasData == null)
             {
                 return;
             }
-            
+
             // populate to UI
             _canvasUniqueId = canvasData.CanvasUniqueId;
             this.Text = canvasData.CanvasTitle;
@@ -262,13 +262,11 @@ namespace Sandbox
             var btnNew = new Button
             {
                 Size = new Size(200, 200),
-                Location = new Point(this.Width -300 - buttons.Count * 10, this.Height / 5 + buttons.Count * 50),
+                Location = new Point(this.Width - 300 - buttons.Count * 10, this.Height / 5 + buttons.Count * 50),
                 Name = "btnNew" + buttons.Count,
                 Text = "New Note",
                 BackColor = Color.LightYellow,
             };
-            //Random rnd = new Random();
-            //btnNew.Location = new Point(rnd.Next(25, this.ClientSize.Width - 25), rnd.Next(112, this.ClientSize.Height - 25));
 
             SuspendLayout();
 
@@ -288,7 +286,7 @@ namespace Sandbox
             ResumeLayout();
         }
 
-        private void onNoteClick (object sender, MouseEventArgs e) //gets last mouse target
+        private void onNoteClick(object sender, MouseEventArgs e) //gets last mouse target
         {
             buttonTarget = (Button)sender;
         }
@@ -300,7 +298,7 @@ namespace Sandbox
             {
                 buttonTarget = (Button)sender;
                 offset = e.Location;
-                if (screenPos.X - offset.X >=0 && screenPos.Y - offset.Y>=0)
+                if (screenPos.X - offset.X >= 0 && screenPos.Y - offset.Y >= 0)
                 {
                     isDrag = true;
                 }
@@ -338,7 +336,7 @@ namespace Sandbox
 
         public void ShowNoteEditForm(object sender, EventArgs e) //shows new form to edit note text
         {
-            if (this.MdiParent != null) 
+            if (this.MdiParent != null)
             {
                 NoteEditDialog childForm = new NoteEditDialog(buttonTarget.Text, newText => buttonTarget.Text = newText);
                 childForm.StartPosition = FormStartPosition.CenterScreen;
@@ -387,7 +385,7 @@ namespace Sandbox
             dialog.setCanvasTitle(_currentCanvasData.CanvasTitle);
             dialog.StartPosition = FormStartPosition.CenterScreen;
 
-            if (dialog.ShowDialog() == DialogResult.OK) 
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
                 UpdateCanvasData();
