@@ -16,8 +16,9 @@ namespace Sandbox
             this.Resize += onFormResized;
         }
 
-        private void onFormResized(object? sender, EventArgs e)
+        private void onFormResized(object? sender, EventArgs e) //handles resizing events
         {
+
             this.panContainer.Width = this.Width - 250;
             this.panContainer.Height = this.Height - 120;
             foreach (Button btn in _canvasButtons)
@@ -35,7 +36,7 @@ namespace Sandbox
             this.Hide();
         }
 
-        public void UpdateCanvasTitles(string canvasUniqueId, string canvasTitle)
+        public void UpdateCanvasTitles(string canvasUniqueId, string canvasTitle) //updates canvas title on select canvas
         {
             foreach (var btn in _canvasButtons)
             {
@@ -62,7 +63,7 @@ namespace Sandbox
             {
                 NoCanvasLabel.Visible = false;
 
-                foreach (CanvasData targetCanvas in CanvasManager.AllCanvas)
+                foreach (CanvasData targetCanvas in CanvasManager.AllCanvas) //loop to create one button for each canvas
                 {
                     var btnNew = new Button
                     {
@@ -98,7 +99,7 @@ namespace Sandbox
             }
         }
 
-        public void DeleteCanvas(string canvasUniqueId)
+        public void DeleteCanvas(string canvasUniqueId) //deletes canvas
         {
             CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasUniqueId == canvasUniqueId);
             if (targetCanvas != null)
@@ -129,7 +130,6 @@ namespace Sandbox
         //link the button to opening the form
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            // Cancel user/Mdi-initiated closes so the instance is not disposed
             if (e.CloseReason == CloseReason.UserClosing || e.CloseReason == CloseReason.MdiFormClosing)
             {
                 e.Cancel = true;

@@ -8,7 +8,7 @@
             this.FormClosing += HomePage_FormClosing;
             this.Load += HomePage_Load;
         }
-        private void ShowNewForm(object sender, EventArgs e)
+        private void ShowNewForm(object sender, EventArgs e) //creates new form
         {
             if (this.MdiParent is MDISandbox mdiParent)
             {
@@ -17,7 +17,7 @@
             }
         }
 
-        private void OpenFile(object sender, EventArgs e)
+        private void OpenFile(object sender, EventArgs e)  //opens existing form
         {
             if (this.MdiParent is MDISandbox mdiParent)
             {
@@ -26,7 +26,7 @@
             }
         }
 
-        private void HomePage_Load(object sender, EventArgs e)
+        private void HomePage_Load(object sender, EventArgs e) //draws horizontal lines for homepage aesthetic.
         {
             for (int i = 1; i < 4; i++)
             {
