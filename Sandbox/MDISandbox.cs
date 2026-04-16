@@ -4,7 +4,7 @@ namespace Sandbox
 {
     public partial class MDISandbox : Form
     {
-        private SelectCanvas selectionScreen;
+        private SelectCanvas _selectionScreen;
         bool CLEARINGALL = false; // for Debug Purpose. decide whether to clear all application memory or not
 
         public MDISandbox()
@@ -32,8 +32,8 @@ namespace Sandbox
             {
                 ClearAllCanvasData(); //clears all data
             }
-            CanvasManager.EnsureLoaded(); 
-            selectionScreen = new SelectCanvas(); //creates select canvas upon load, since user may save a form before opening the select canvas window
+            CanvasManager.EnsureLoaded();
+            _selectionScreen = new SelectCanvas(); //creates select canvas upon load, since user may save a form before opening the select canvas window
 
         }
 
@@ -42,7 +42,7 @@ namespace Sandbox
         {
 
             Canvas canvasToBeOpened = new Canvas();
-            canvasToBeOpened.InitCanvas(selectionScreen, string.Empty,true);
+            canvasToBeOpened.InitCanvas(_selectionScreen, string.Empty,true);
 
             canvasToBeOpened.MdiParent = this;
             canvasToBeOpened.Show();
@@ -57,13 +57,13 @@ namespace Sandbox
             {
                 this.ActiveMdiChild.Close();
             }
-            selectionScreen.PopulateCanvasSelections();
+            _selectionScreen.PopulateCanvasSelections();
 
-            selectionScreen.MdiParent = this;
-            selectionScreen.WindowState = FormWindowState.Maximized;
-            selectionScreen.Text = "Select Canvas";
-            selectionScreen.TopMost = true;
-            selectionScreen.Show();
+            _selectionScreen.MdiParent = this;
+            _selectionScreen.WindowState = FormWindowState.Maximized;
+            _selectionScreen.Text = "Select Canvas";
+            _selectionScreen.TopMost = true;
+            _selectionScreen.Show();
 
         }
 

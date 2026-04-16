@@ -5,6 +5,7 @@ namespace Sandbox
     {
         List<Button> _canvasButtons = new List<Button>();
         const int BUTTON_MIN_WIDTH = 600;
+
         public SelectCanvas()
         {
             InitializeComponent();
@@ -15,7 +16,7 @@ namespace Sandbox
             this.Resize += onFormResized;
         }
 
-        private void onFormResized(object sender, EventArgs e)
+        private void onFormResized(object? sender, EventArgs e)
         {
             this.panContainer.Width = this.Width - 250;
             this.panContainer.Height = this.Height - 120;

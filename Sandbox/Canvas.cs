@@ -5,7 +5,7 @@ namespace Sandbox
 {
     public partial class Canvas : Form
     {
-        List<Button> buttons = new List<Button>();
+        List<Button> _noteButtons = new List<Button>();
         bool isDrag = false;
         private Point offset;
         private Button buttonTarget;
@@ -22,9 +22,9 @@ namespace Sandbox
             InitializeComponent();
             InitializeColorMenu();
 
-            this.MouseDown += CanvasMouseDown;
-            this.MouseMove += CanvasMouseMove;
-            this.MouseUp += CanvasMouseUp;
+            this.panWall.MouseDown += CanvasMouseDown;
+            this.panWall.MouseMove += CanvasMouseMove;
+            this.panWall.MouseUp += CanvasMouseUp;
         }
 
         private void CanvasMouseDown(object? sender, MouseEventArgs e)
@@ -44,10 +44,13 @@ namespace Sandbox
             {
                 int dx = e.X - panStartPoint.X;
                 int dy = e.Y - panStartPoint.Y;
-                foreach (Button btn in buttons)
+                foreach (Button btn in _noteButtons)
                 {
                     btn.Left += dx;
                     btn.Top += dy;
+
+                    if (btn.Left < 0) { btn.Left = 0; }
+                    if (btn.Top < 0) { btn.Top = 0; }
                 }
                 panStartPoint = e.Location;
             }
@@ -154,7 +157,7 @@ namespace Sandbox
                 CanvasManager.AllCanvas = new List<CanvasData>();
             }
 
-            var noteData = buttons.Select(b => new NoteData
+            var noteData = _noteButtons.Select(b => new NoteData
             {
                 Text = b.Text,
                 X = b.Location.X,
@@ -176,7 +179,7 @@ namespace Sandbox
 
         public void UpdateCanvasData() //saves canvas with canvasdata
         {
-            var noteData = buttons.Select(b => new NoteData
+            var noteData = _noteButtons.Select(b => new NoteData
             {
                 Text = b.Text,
                 X = b.Location.X,
@@ -231,45 +234,45 @@ namespace Sandbox
 
             foreach (var d in canvasData.Notes)
             {
-                var newBtn = new Button
+                var noteBtn = new Button
                 {
                     Text = d.Text,
                     Location = new Point(d.X, d.Y),
                     Size = new Size(d.Width, d.Height),
                     BackColor = Color.FromArgb(Convert.ToInt32(d.BackColor, 16)),
                 };
-                newBtn.MouseDown += onButton_MouseDown;
-                newBtn.MouseMove += onButton_MouseMove;
-                newBtn.MouseUp += onButton_MouseUp;
+                noteBtn.MouseDown += onButton_MouseDown;
+                noteBtn.MouseMove += onButton_MouseMove;
+                noteBtn.MouseUp += onButton_MouseUp;
 
-                Controls.Add(newBtn);
-                newBtn.BringToFront();
-                buttons.Add(newBtn);
+                panWall.Controls.Add(noteBtn);
+                noteBtn.BringToFront();
+                _noteButtons.Add(noteBtn);
 
             }
         }
 
         public void onCreateNote_Click(object? sender, EventArgs e) //make new note
         {
-            var btnNew = new Button
+            var btnNewNote = new Button
             {
                 Size = new Size(200, 200),
-                Location = new Point(this.Width - 300 - buttons.Count * 10, this.Height / 5 + buttons.Count * 50),
-                Name = "btnNew" + buttons.Count,
+                Location = new Point(this.Width - 300 - _noteButtons.Count * 10, this.Height / 5 + _noteButtons.Count * 50),
+                Name = "btnNew" + _noteButtons.Count,
                 Text = "New Note",
                 BackColor = Color.LightYellow,
             };
 
             SuspendLayout();
 
-            btnNew.TabIndex = 0;
-            btnNew.MouseDown += onButton_MouseDown;
-            btnNew.MouseMove += onButton_MouseMove;
-            btnNew.MouseUp += onButton_MouseUp;
+            btnNewNote.TabIndex = 0;
+            btnNewNote.MouseDown += onButton_MouseDown;
+            btnNewNote.MouseMove += onButton_MouseMove;
+            btnNewNote.MouseUp += onButton_MouseUp;
 
-            Controls.Add(btnNew);
+            panWall.Controls.Add(btnNewNote);
 
-            buttons.Add(btnNew);
+            _noteButtons.Add(btnNewNote);
 
             ResumeLayout();
         }
@@ -286,7 +289,7 @@ namespace Sandbox
             {
                 buttonTarget = (Button)sender;
                 offset = e.Location;
-                if (screenPos.X - offset.X >= 0 && screenPos.Y - offset.Y >= 0)
+                if (screenPos.X - offset.X >= 0 && screenPos.Y - offset.Y - panWall.Top >= 0)
                 {
                     isDrag = true;
                 }
@@ -304,10 +307,13 @@ namespace Sandbox
         {
             Point screenPos = PointToClient(MousePosition);
             if (isDrag && buttonTarget != null)
-            {
-                buttonTarget.Location = new Point(
-                    screenPos.X - offset.X,
-                    screenPos.Y - offset.Y);
+            { 
+                var newX = screenPos.X - offset.X;
+                var newY = screenPos.Y - offset.Y - panWall.Top;
+                if (newX < 0) { newX = 0; }
+                if (newY < 0) { newY = 0; }
+
+                buttonTarget.Location = new Point(newX, newY);
             }
         }
 
@@ -338,7 +344,7 @@ namespace Sandbox
         public void DeleteNote(object? sender, EventArgs e) //delete
         {
             Controls.Remove(buttonTarget);
-            buttons.Remove(buttonTarget);
+            _noteButtons.Remove(buttonTarget);
         }
 
         private void onChooseColorClick(object? sender, MouseEventArgs e) //can choose colors
@@ -354,12 +360,12 @@ namespace Sandbox
                 CanvasNameDialog dialog = new CanvasNameDialog();
                 dialog.Text = "Name the new Canvas";
                 var tempName = CanvasData.generateCanvasUniqueId();
-                dialog.setCanvasTitle(tempName);
+                dialog.SetCanvasTitle(tempName);
                 dialog.StartPosition = FormStartPosition.CenterScreen;
 
                 if (dialog.ShowDialog() == DialogResult.OK) 
                 {
-                    _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
+                    _currentCanvasData.CanvasTitle = dialog.GetCanvasTitle();
                     InsertCanvasData();
                     this.Text = _currentCanvasData.CanvasTitle;
                     renameCanvasButton.Enabled = true;
@@ -375,13 +381,13 @@ namespace Sandbox
         {
             CanvasNameDialog dialog = new CanvasNameDialog();
             dialog.Text = "Rename Canvas";
-            dialog.setCanvasTitle(_currentCanvasData.CanvasTitle);
+            dialog.SetCanvasTitle(_currentCanvasData.CanvasTitle);
 
             dialog.StartPosition = FormStartPosition.CenterScreen;
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                _currentCanvasData.CanvasTitle = dialog.getCanvasTitle();
+                _currentCanvasData.CanvasTitle = dialog.GetCanvasTitle();
                 UpdateCanvasData();
                 _selectCanvas.UpdateCanvasTitles(_currentCanvasData.CanvasUniqueId, _currentCanvasData.CanvasTitle);
                 
