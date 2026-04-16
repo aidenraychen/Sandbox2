@@ -69,7 +69,7 @@ namespace Sandbox
             colorPanel.BorderStyle = BorderStyle.FixedSingle;
             colorPanel.Location = new Point(120, 120);
             colorPanel.Visible = false;
-            Color[] colors = new Color[]
+            Color[] colors = new Color[] //selected colors for menu
             {
                 Color.LightYellow,
                 Color.LightBlue,
@@ -79,7 +79,7 @@ namespace Sandbox
                 Color.LightGray
             };
             int x = 5;
-            foreach (var color in colors)
+            foreach (var color in colors) //creation of colored square buttons
             {
                 var colorSquare = new Button();
                 colorSquare.BackColor = color;
@@ -91,7 +91,7 @@ namespace Sandbox
                 colorPanel.Controls.Add(colorSquare);
                 x += colorSquareSize + 2;
             }
-            var exitButton = new Button();
+            var exitButton = new Button(); //creates exit button
             exitButton.BackColor = Color.Red;
             exitButton.ForeColor = Color.White;
             exitButton.Size = new Size(40, 60);
@@ -372,7 +372,7 @@ namespace Sandbox
             }
         }
 
-        private void onRenameCanvasClick(object? sender, MouseEventArgs e)
+        private void onRenameCanvasClick(object? sender, MouseEventArgs e) //shows new dialog to rename the canvas
         {
             CanvasNameDialog dialog = new CanvasNameDialog();
             dialog.Text = "Rename Canvas";
@@ -395,7 +395,7 @@ namespace Sandbox
             this.Close();
         }
 
-        private void onDeleteCanvasClick(object? sender, MouseEventArgs e)
+        private void onDeleteCanvasClick(object? sender, MouseEventArgs e) //removes canvas from JSON and select canvas menu
         {
             CanvasData targetCanvas = CanvasManager.AllCanvas.FirstOrDefault(c => c.CanvasUniqueId == _canvasUniqueId);
             if (targetCanvas != null)

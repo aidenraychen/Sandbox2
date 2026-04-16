@@ -10,11 +10,11 @@ namespace Sandbox
             InitializeComponent();
         }
 
-        public string GetCanvasTitle()
+        public string GetCanvasTitle() //gets text inside the text box
         {
             return renameTextBox.Text;
         }
-        public void SetCanvasTitle(string value)
+        public void SetCanvasTitle(string value) //sets canvas title to parameter value, which is used w
         {
             renameTextBox.Text = value;
         }

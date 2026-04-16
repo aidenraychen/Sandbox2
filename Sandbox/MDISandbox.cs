@@ -51,7 +51,7 @@ namespace Sandbox
             canvasToBeOpened.WindowState = FormWindowState.Maximized;
         }
 
-        public void OpenFile(object sender, EventArgs e)
+        public void OpenFile(object sender, EventArgs e) //display select canvas screen
         {
             if (this.ActiveMdiChild != null)
             {
@@ -85,7 +85,7 @@ namespace Sandbox
 
         private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LayoutMdi(MdiLayout.Cascade);
+            LayoutMdi(MdiLayout.Cascade); //arranges child windows in a
         }
 
         private void TileVerticalToolStripMenuItem_Click(object sender, EventArgs e)
