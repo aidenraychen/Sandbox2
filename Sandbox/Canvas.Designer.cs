@@ -90,7 +90,7 @@
             // panWall
             // 
             panWall.AutoScroll = true;
-            panWall.BackColor = SystemColors.ActiveCaption;
+            panWall.BackColor = SystemColors.Control;
             panWall.Dock = DockStyle.Fill;
             panWall.Location = new Point(0, 212);
             panWall.Name = "panWall";
@@ -188,7 +188,7 @@
             noteEditMenu.ResumeLayout(false);
             panCommand.ResumeLayout(false);
             ResumeLayout(false);
-            closeCanvasButton.Text = "Close " + panWall.Top+ panWall.Height;
+            
         }
 
         #endregion

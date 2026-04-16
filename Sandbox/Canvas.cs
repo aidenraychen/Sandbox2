@@ -48,9 +48,6 @@ namespace Sandbox
                 {
                     btn.Left += dx;
                     btn.Top += dy;
-
-                    if (btn.Left < 0) { btn.Left = 0; }
-                    if (btn.Top < 0) { btn.Top = 0; }
                 }
                 panStartPoint = e.Location;
             }
@@ -289,7 +286,7 @@ namespace Sandbox
             {
                 buttonTarget = (Button)sender;
                 offset = e.Location;
-                if (screenPos.X - offset.X >= 0 && screenPos.Y - offset.Y - panWall.Top >= 0)
+                if (screenPos.X - offset.X >= 0 && screenPos.Y - offset.Y + panWall.Top >= 0)
                 {
                     isDrag = true;
                 }
@@ -310,8 +307,6 @@ namespace Sandbox
             { 
                 var newX = screenPos.X - offset.X;
                 var newY = screenPos.Y - offset.Y - panWall.Top;
-                if (newX < 0) { newX = 0; }
-                if (newY < 0) { newY = 0; }
 
                 buttonTarget.Location = new Point(newX, newY);
             }
