@@ -296,7 +296,7 @@ namespace Sandbox
             if (e.Button == MouseButtons.Right)
             {
                 buttonTarget = (Button)sender;
-                noteEditMenu.Show(this, new Point(buttonTarget.Right, buttonTarget.Top));
+                noteEditMenu.Show(this, new Point(buttonTarget.Right, buttonTarget.Top + panWall.Top));
             }
         }
 

@@ -89,7 +89,7 @@
             // 
             // panWall
             // 
-            panWall.AutoScroll = true;
+            panWall.AutoScroll = false;
             panWall.BackColor = SystemColors.Control;
             panWall.Dock = DockStyle.Fill;
             panWall.Location = new Point(0, 212);
